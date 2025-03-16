@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const testConfig = {
   host: process.env.PGHOST_TEST,
@@ -9,6 +9,16 @@ const testConfig = {
   database: process.env.PGDATABASE_TEST,
 };
 
-const pool = process.env.NODE_ENV === 'test' ? new Pool(testConfig) : new Pool();
+// Konfigurasi untuk Supabase
+const supabaseConfig = {
+  connectionString: process.env.DATABASE_URL, // Pastikan DATABASE_URL ada di .env
+  ssl: { rejectUnauthorized: false }, // SSL false untuk Supabase
+};
+
+// Pilih konfigurasi berdasarkan environment
+const pool =
+  process.env.NODE_ENV === "test"
+    ? new Pool(testConfig) // Gunakan konfigurasi test saat testing
+    : new Pool(supabaseConfig); // Gunakan Supabase di mode normal
 
 module.exports = pool;
